@@ -2,29 +2,19 @@ pipeline {
     agent any
 
     stages {
-        stage('Setup Virtual Environment') {
+        stage('install dependencies') {
             steps {
-                // Install virtualenv if not already installed
-                sh 'pip install virtualenv'
-
-                // Create a virtual environment
-                sh 'virtualenv venv'
-
-                // Activate the virtual environments
-                sh 'source venv/bin/activate'
                 
                 // Install required packages
-                sh 'pip install -r requirements.txt'
+                sh 'pip install -r /var/lib/jenkins/workspace/my_app/requirements.txt'
             }
         }
 
         stage('Run Django Tests') {
             steps {
-                // Activate the virtual environment
-                sh 'source venv/bin/activate'
 
                 // Run Django tests
-                sh 'python manage.py test'
+                sh 'python3 /var/lib/jenkins/workspace/my_app/myproject/manage.py test'
             }
         }
     }
