@@ -2,19 +2,38 @@ pipeline {
     agent any
 
     stages {
-        stage('Test') {
+        stage('Setup Virtual Environment') {
             steps {
-                // Run Django tests cases python
-                sh 'python3 /var/lib/jenkins/workspace/my_app/myproject/manage.py test'
+                // Install virtualenv if not already installed
+                sh 'pip install virtualenv'
+
+                // Create a virtual environment
+                sh 'virtualenv venv'
+
+                // Activate the virtual environments
+                sh 'source venv/bin/activate'
+                
+                // Install required packages
+                sh 'pip install -r requirements.txt'
             }
         }
-        stage('Deploy') {
+
+        stage('Run Django Tests') {
             steps {
-                // Wait for manual approval
-                input 'Approve deployment to production?'
-                // Deploy to production
-                // ...
+                // Activate the virtual environment
+                sh 'source venv/bin/activate'
+
+                // Run Django tests
+                sh 'python manage.py test'
             }
         }
     }
+
+    post {
+        always {
+            // Deactivate the virtual environment
+            sh 'deactivate || true'
+        }
+    }
 }
+
