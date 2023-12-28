@@ -10,7 +10,7 @@ pipeline {
                 // Create a virtual environment
                 sh 'virtualenv venv'
 
-                // Activate the virtual environment
+                // Activate the virtual environments
                 sh 'source venv/bin/activate'
                 
                 // Install required packages
