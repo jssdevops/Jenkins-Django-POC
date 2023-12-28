@@ -41,7 +41,7 @@ pipeline {
 
         stage('Run Django Tests') {
             steps {
-                
+
                 // Run Django tests
                 sh 'python3 /var/lib/jenkins/workspace/my_app/myproject/manage.py test'
             }
@@ -62,17 +62,6 @@ pipeline {
             }
         }
 
-        // Adding a deploy stage based on manual approval
-        stage('Deploy') {
-            when {
-                expression {
-                    currentBuild.currentResult == 'SUCCESS'
-                }
-            }
-            steps {
-                // Your deployment steps here
-                sh 'python3 /var/lib/jenkins/workspace/my_app/myproject/deploy.py'
-            }
-        }
+
     }
 }
