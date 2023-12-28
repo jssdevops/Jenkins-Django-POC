@@ -1,0 +1,24 @@
+name: Merge PR on Successful Jenkins Build
+
+on:
+  status:
+    # Listen to the Jenkins build job's success status
+    # Adjust the following with your Jenkins context
+    contexts:
+      - 'continuous-integration/jenkins'
+
+jobs:
+  merge_pr:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check Jenkins build status
+        if: ${{ github.event.statuses[0].state == 'success' }}
+        run: |
+          # Add the GitHub token with necessary permissions for repo access
+          # You might need to adjust the PR merge command based on your branch naming convention
+          git checkout ${{ github.event.statuses[0].target_url.split('/')[8] }}
+          git pull origin ${{ github.event.statuses[0].target_url.split('/')[8] }}
+          git fetch origin pull/${{ github.event.statuses[0].target_url.split('/')[7] }}/merge:JenkinsPR
+          git merge JenkinsPR --no-ff --no-edit
+          git push origin ${{ github.event.statuses[0].target_url.split('/')[8] }}
