@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('Test') {
             steps {
-                // Run Django tests
+                // Run Django tests cases
                 sh 'python3 /var/lib/jenkins/workspace/my_app/myproject/manage.py test'
             }
         }
