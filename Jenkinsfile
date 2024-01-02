@@ -17,7 +17,7 @@ pipeline
                 // Run tests inside the Docker container
                 script {
                     docker.image('my-django-app').inside {
-                        sh 'python3 manage.py test'
+                        sh 'python3 /var/lib/jenkins/workspace/my_app/myproject/manage.py test'
                     }
                 }
             }
