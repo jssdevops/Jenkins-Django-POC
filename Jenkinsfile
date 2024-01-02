@@ -2,12 +2,7 @@ pipeline {
     agent any
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Checkout your code from version control
-                git 'https://github.com/jssdevops/Jenkins-Django-POC.git'
-            }
-        }
+
 
         stage('Build Docker Image') {
             steps {
