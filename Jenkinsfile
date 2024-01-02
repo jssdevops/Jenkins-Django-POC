@@ -3,28 +3,23 @@ pipeline
 {
     agent any
 
-    stages {
-        stage('install dependencies') {
+        stage('Build Image') {
             steps {
-                
-                // Install required packages
-                sh 'pip install -r /var/lib/jenkins/workspace/my_app/requirements.txt'
+                // Build your Docker image
+                script {
+                    docker.build('my-django-app', '-f Dockerfile .')
+                }
             }
         }
 
-        stage('Run Django Tests') {
+        stage('Run Tests in Docker') {
             steps {
-
-                // Run Django tests
-                sh 'python3 /var/lib/jenkins/workspace/my_app/myproject/manage.py test'
+                // Run tests inside the Docker container
+                script {
+                    docker.image('my-django-app').inside {
+                        sh 'python3 manage.py test'
+                    }
+                }
             }
         }
     }
-
-    post {
-        always {
-            // Deactivate the virtual environment
-            sh 'deactivate || true'
-        }
-    }
-}
