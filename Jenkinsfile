@@ -1,7 +1,6 @@
-pipeline 
-
-{
+pipeline {
     agent any
+
 
         stage('Build Image') {
             steps {
