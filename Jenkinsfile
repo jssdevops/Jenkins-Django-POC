@@ -1,24 +1,39 @@
 pipeline {
     agent any
 
+    stages {
+        stage('Checkout') {
+            steps {
+                // Checkout your code from version control
+                git 'https://github.com/jssdevops/Jenkins-Django-POC.git'
+            }
+        }
 
-        stage('Build Image') {
+        stage('Build Docker Image') {
             steps {
                 // Build your Docker image
                 script {
-                    docker.build('my-django-app', '-f Dockerfile .')
+                    docker.build 'my-django-app'
                 }
             }
         }
 
         stage('Run Tests in Docker') {
             steps {
-                // Run tests inside the Docker container
+                // Run Django tests inside the Docker container
                 script {
-                    docker.image('my-django-app').inside {
-                        sh 'python3 /var/lib/jenkins/workspace/my_app/myproject/manage.py test'
+                    docker.image('my-django-app').inside('-v /var/lib/jenkins/workspace/my_app:/app') {
+                        sh 'python3 /app/myproject/manage.py test'
                     }
                 }
             }
         }
     }
+
+    post {
+        always {
+            // Deactivate the virtual environment
+            sh 'deactivate || true'
+        }
+    }
+}
