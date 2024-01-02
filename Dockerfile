@@ -1,22 +1,19 @@
 # Use an official Python runtime as a base image
 FROM python:3.9
 
-# Set environment variables for Python
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # Set the working directory in the container
-WORKDIR /code
+WORKDIR /app
 
 # Copy the requirements file and install dependencies
-COPY requirements.txt /code/
+COPY requirements.txt /app/
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy the Django project files into the container
-COPY . /code/
+# Copy the entire Django project to the container
+COPY . /app/
 
-# Expose the Django development server port
-EXPOSE 8000
-
-# Define the command to run the Django development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Run Django tests
+CMD ["python", "manage.py", "test"]
